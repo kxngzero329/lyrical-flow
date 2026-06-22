@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
-import { Search, Music2, Sparkles, ArrowUpRight, X, Headphones, Disc3, Mic2, Play, Pause, Heart, Github } from "lucide-react";
+import { Search, Music2, Sparkles, ArrowUpRight, X, Headphones, Disc3, Mic2, Play, Pause, Heart, Github, Youtube, ExternalLink } from "lucide-react";
 import { suggestSongs, fetchLyrics, type Suggestion } from "@/lib/lyrics-api";
+import { searchYouTube } from "@/lib/youtube.functions";
 import { VinylLoader } from "@/components/VinylLoader";
 import { Equalizer } from "@/components/Equalizer";
 
