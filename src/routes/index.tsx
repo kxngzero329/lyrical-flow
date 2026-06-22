@@ -96,7 +96,15 @@ function Home() {
     setLyrics(null);
     setError(null);
     setLoadingLyrics(true);
+    setYtVideoId(null);
+    setShowFullSong(false);
+    setYtLoading(true);
     setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+    // Lyrics + YouTube in parallel
+    ytSearch({ data: { q: `${s.artist.name} ${s.title}` } })
+      .then((r) => setYtVideoId(r.videoId))
+      .catch(() => setYtVideoId(null))
+      .finally(() => setYtLoading(false));
     try {
       const text = await fetchLyrics(s.artist.name, s.title);
       setLyrics(text);
@@ -106,6 +114,7 @@ function Home() {
       setLoadingLyrics(false);
     }
   }
+
 
   function togglePlay(s: Suggestion) {
     if (!audio || !s.preview) return;
