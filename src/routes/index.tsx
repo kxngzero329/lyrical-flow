@@ -49,6 +49,11 @@ function Home() {
   const [favorites, setFavorites] = useState<Suggestion[]>([]);
   const [audio] = useState(() => (typeof Audio !== "undefined" ? new Audio() : null));
   const [playingId, setPlayingId] = useState<number | null>(null);
+  const [ytVideoId, setYtVideoId] = useState<string | null>(null);
+  const [ytLoading, setYtLoading] = useState(false);
+  const [showFullSong, setShowFullSong] = useState(false);
+  const ytSearch = useServerFn(searchYouTube);
+
 
   const resultsRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
