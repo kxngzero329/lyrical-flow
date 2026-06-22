@@ -362,8 +362,75 @@ function Home() {
                       <Heart className={`h-4 w-4 ${isFav(selected.id) ? "fill-current" : ""}`} />
                     </button>
                   </div>
+
+                  {/* Full song / deep links */}
+                  <div className="mt-6 space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
+                        <Youtube className="h-3.5 w-3.5" /> Full song
+                      </div>
+                      {ytLoading && <Equalizer bars={4} />}
+                    </div>
+
+                    {!ytLoading && ytVideoId && !showFullSong && (
+                      <button
+                        onClick={() => { if (playingId) { audio?.pause(); setPlayingId(null); } setShowFullSong(true); }}
+                        className="w-full group relative overflow-hidden rounded-2xl bg-gradient-primary p-[1px] shadow-glow hover:scale-[1.01] transition"
+                      >
+                        <div className="rounded-2xl bg-background/80 backdrop-blur px-4 py-3 flex items-center justify-between gap-3">
+                          <span className="flex items-center gap-3 text-sm font-medium">
+                            <span className="grid place-items-center h-9 w-9 rounded-full bg-gradient-primary">
+                              <Play className="h-4 w-4 text-primary-foreground ml-0.5" />
+                            </span>
+                            Play full track
+                          </span>
+                          <span className="text-xs text-muted-foreground">via YouTube</span>
+                        </div>
+                      </button>
+                    )}
+
+                    {showFullSong && ytVideoId && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
+                        className="relative aspect-video rounded-2xl overflow-hidden shadow-glow ring-1 ring-white/10"
+                      >
+                        <iframe
+                          src={`https://www.youtube-nocookie.com/embed/${ytVideoId}?autoplay=1&rel=0&modestbranding=1`}
+                          title={`${selected.title} — ${selected.artist.name}`}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          className="absolute inset-0 h-full w-full"
+                        />
+                      </motion.div>
+                    )}
+
+                    {!ytLoading && !ytVideoId && (
+                      <div className="rounded-2xl glass px-4 py-3 text-xs text-muted-foreground">
+                        Couldn't auto-match a video. Try the deep links below.
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-3 gap-2 pt-1">
+                      {[
+                        { label: "Spotify", url: `https://open.spotify.com/search/${encodeURIComponent(`${selected.artist.name} ${selected.title}`)}` },
+                        { label: "Apple", url: `https://music.apple.com/search?term=${encodeURIComponent(`${selected.artist.name} ${selected.title}`)}` },
+                        { label: "YouTube", url: `https://www.youtube.com/results?search_query=${encodeURIComponent(`${selected.artist.name} ${selected.title}`)}` },
+                      ].map((d) => (
+                        <a
+                          key={d.label}
+                          href={d.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="glass rounded-xl px-3 py-2 text-xs flex items-center justify-center gap-1.5 hover:bg-white/10 transition"
+                        >
+                          {d.label} <ExternalLink className="h-3 w-3" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
+
 
               {/* Lyrics */}
               <div className="glass rounded-3xl p-6 sm:p-10 shadow-soft min-h-[400px] relative">
