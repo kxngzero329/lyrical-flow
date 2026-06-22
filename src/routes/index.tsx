@@ -11,9 +11,9 @@ import { Equalizer } from "@/components/Equalizer";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Lyrical.ly — Find lyrics, feel the song" },
+      { title: "Lyrical.ly | Find lyrics, feel the song" },
       { name: "description", content: "Search lyrics for any song in seconds. A beautiful, fluid lyrics finder with a musical vibe." },
-      { property: "og:title", content: "Lyrical.ly" },
+      { property: "og:title", content: "Lyrical.ly | Find lyrics, feel the song" },
       { property: "og:description", content: "Find lyrics, feel the song." },
     ],
   }),
@@ -545,7 +545,7 @@ function Home() {
           {[
             { icon: Search, title: "Instant search", body: "Live suggestions as you type. Pulls covers, artists, and 30-second previews." },
             { icon: Headphones, title: "Read & vibe", body: "Lyrics fade in line by line so you can follow along like a karaoke screen." },
-            { icon: Heart, title: "Your rotation", body: "Save favorites locally. Your taste, your device — no account needed." },
+            { icon: Heart, title: "Your rotation", body: "Save favorites locally. Your taste, your device, no account needed." },
           ].map((c, i) => (
             <motion.div
               key={c.title}
@@ -588,9 +588,9 @@ function Home() {
           <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-muted-foreground">
             <div className="flex items-center gap-2">
               <Disc3 className="h-4 w-4 animate-spin-slow" />
-              <span>© {new Date().getFullYear()} Lyrical.ly — every word, every verse.</span>
+              <span>© {new Date().getFullYear()} Lyrical.ly - every word, every verse.</span>
             </div>
-            <div>Made with ♪ and a slow-spinning record.</div>
+            <div>Made by <a href="https://github.com/kxngzero329" className="text-foreground hover:text-primary transition">Zuhayr Smith</a>. All rights reserved.</div>
           </div>
         </div>
       </footer>
