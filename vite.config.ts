@@ -12,4 +12,9 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Expose an empty plugins array so external tooling (e.g. `wrangler deploy`'s
+  // auto-setup for TanStack Start) can detect and modify the Vite config.
+  vite: {
+    plugins: [],
+  },
 });
