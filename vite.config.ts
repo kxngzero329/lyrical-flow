@@ -12,9 +12,23 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
-  // Expose an empty plugins array so external tooling (e.g. `wrangler deploy`'s
-  // auto-setup for TanStack Start) can detect and modify the Vite config.
-  vite: {
-    plugins: [],
+  // Keep this top-level plugins array so Wrangler's TanStack detector can parse
+  // the config if it ever needs to. Additional plugins are already injected by
+  // @lovable.dev/vite-tanstack-config.
+  plugins: [],
+  // Force Nitro to generate Cloudflare's deploy config during `vite build`.
+  // Without this outside Lovable, Wrangler tries an interactive auto-setup and
+  // fails to rewrite this wrapped config in CI.
+  nitro: {
+    preset: "cloudflare-module",
+    output: {
+      dir: "dist",
+      serverDir: "dist/server",
+      publicDir: "dist/client",
+    },
+    cloudflare: {
+      nodeCompat: true,
+      deployConfig: true,
+    },
   },
 });
