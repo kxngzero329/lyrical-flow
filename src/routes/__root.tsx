@@ -12,6 +12,60 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+const extensionHydrationCleanupScript = `
+(() => {
+  const attributesToRemove = [
+    "cz-shortcut-listen",
+    "fdprocessedid",
+    "data-new-gr-c-s-check-loaded",
+    "data-gr-ext-installed",
+    "data-lt-installed",
+  ];
+
+  const cleanElement = (element) => {
+    if (!element?.removeAttribute) return;
+    for (const attribute of attributesToRemove) {
+      element.removeAttribute(attribute);
+    }
+  };
+
+  const cleanTree = (root = document.documentElement) => {
+    cleanElement(root);
+    root
+      .querySelectorAll?.(attributesToRemove.map((attribute) => "[" + attribute + "]").join(","))
+      .forEach(cleanElement);
+  };
+
+  cleanTree();
+
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === "attributes") {
+        cleanElement(mutation.target);
+      }
+
+      for (const node of mutation.addedNodes) {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          cleanTree(node);
+        }
+      }
+    }
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: attributesToRemove,
+    childList: true,
+    subtree: true,
+  });
+
+  window.addEventListener("load", () => {
+    cleanTree();
+    setTimeout(() => observer.disconnect(), 1000);
+  });
+})();
+`;
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -57,6 +111,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Lyrical.ly | Find lyrics, feel the song" },
       { name: "description", content: "Discover song lyrics instantly with Lyrical.ly — a beautiful, fluid lyrics finder for every mood." },
       { name: "theme-color", content: "#0b0612" },
+      { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "Lyrical.ly" },
@@ -83,9 +138,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <head><HeadContent /></head>
-      <body>{children}<Scripts /></body>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: extensionHydrationCleanupScript }}
+        />
+        <HeadContent />
+      </head>
+      <body suppressHydrationWarning>{children}<Scripts /></body>
     </html>
   );
 }

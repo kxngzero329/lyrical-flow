@@ -38,6 +38,8 @@ const MOODS = [
   { label: "Sunrise", q: "Coldplay", from: "65", to: "300" },
 ];
 
+const COPYRIGHT_YEAR = 2026;
+
 function Home() {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -163,15 +165,8 @@ function Home() {
       </header>
 
       {/* HERO */}
-      <section id="top" ref={heroRef} className="relative pt-32 sm:pt-40 pb-20 sm:pb-32 noise">
+      <section id="top" ref={heroRef} className="relative pt-32 sm:pt-26 pb-20 sm:pb-32 noise">
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative mx-auto max-w-6xl px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs uppercase tracking-[0.2em] text-muted-foreground"
-          >
-            <Sparkles className="h-3 w-3 text-amber-glow" /> A new way to feel songs
-          </motion.div>
-
           <div className="mt-6 grid md:grid-cols-[1.4fr_1fr] gap-8 items-end">
             <h1 className="font-display text-[clamp(3rem,11vw,8.5rem)] leading-[0.92] tracking-tight">
               <motion.span initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="block">
@@ -588,7 +583,7 @@ function Home() {
           <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-muted-foreground">
             <div className="flex items-center gap-2">
               <Disc3 className="h-4 w-4 animate-spin-slow" />
-              <span>© {new Date().getFullYear()} Lyrical.ly - every word, every verse.</span>
+              <span>© {COPYRIGHT_YEAR} Lyrical.ly - every word, every verse.</span>
             </div>
             <div>Made by <a href="https://github.com/kxngzero329" className="text-foreground hover:text-primary transition">Zuhayr Smith</a>. All rights reserved.</div>
           </div>
